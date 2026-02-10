@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediSupply - Plataforma B2B de Suministros Médicos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Search Section */
+        .search-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-search {
+            background: #667eea;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-search:hover {
+            background: #5568d3;
+        }
+
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.7rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+
+        .product-description {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+
+        .info-label {
+            color: #718096;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .availability {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .available {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .unavailable {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            padding: 0.8rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-add-cart:hover {
+            background: #5568d3;
+        }
+
+        .btn-add-cart:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 1.5rem;
+            background: #667eea;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .cart-item {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .qty-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #cbd5e0;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .cart-footer {
+            padding: 1.5rem;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-align: right;
+        }
+
+        .btn-checkout {
+            width: 100%;
+            padding: 1rem;
+            background: #48bb78;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-checkout:hover {
+            background: #38a169;
+        }
+
+        /* Cart Badge */
+        .cart-badge {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: #667eea;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .cart-badge:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #f56565;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-file {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px dashed #cbd5e0;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background: #5568d3;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .alert-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        /* User Info */
+        .user-info {
+            display: none;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info.active {
+            display: flex;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .btn-logout {
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                🏥 MediSupply
+            </div>
+            <div class="nav-buttons" id="guestNav">
+                <button class="btn btn-secondary" onclick="showLoginModal()">Iniciar Sesión</button>
+                <button class="btn btn-primary" onclick="showRegisterModal()">Registrarse</button>
+            </div>
+            <div class="user-info" id="userNav">
+                <span class="user-name" id="userName"></span>
+                <button class="btn-logout" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 style="margin-bottom: 1rem;">Buscar Productos Médicos</h2>
+            <div class="search-box">
+                <input type="text" class="search-input" id="searchInput" placeholder="Buscar medicamentos, insumos hospitalarios...">
+                <button class="btn-search" onclick="searchProducts()">🔍 Buscar</button>
+            </div>
+            <div class="filters">
+                <select class="filter-select" id="categoryFilter">
+                    <option value="">Todas las categorías</option>
+                    <option value="medicamentos">Medicamentos</option>
+                    <option value="insumos">Insumos Hospitalarios</option>
+                    <option value="equipos">Equipos Médicos</option>
+                    <option value="dispositivos">Dispositivos</option>
+                </select>
+                <select class="filter-select" id="availabilityFilter">
+                    <option value="">Todas las disponibilidades</option>
+                    <option value="available">Disponible</option>
+                    <option value="unavailable">No Disponible</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+            <!-- Los productos se cargarán dinámicamente -->
+        </div>
+    </div>
+
+    <!-- Cart Badge -->
+    <div class="cart-badge" onclick="toggleCart()">
+        🛒
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Carrito de Compras</h3>
+            <button class="cart-close" onclick="toggleCart()">×</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <p style="text-align: center; color: #718096; padding: 2rem;">El carrito está vacío</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                Total de productos: <span id="totalItems">0</span>
+            </div>
+            <button class="btn-checkout" onclick="proceedToCheckout()">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <!-- Registration Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <div class="modal-header">Registro de IPS</div>
+            <div class="alert alert-info">
+                Para acceder a la plataforma, complete el siguiente formulario y adjunte los documentos requeridos.
+            </div>
+            <form onsubmit="handleRegistration(event)">
+                <div class="form-group">
+                    <label class="form-label">Nombre de la IPS *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">NIT *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nombre del Representante Legal *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico *</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Teléfono *</label>
+                    <input type="tel" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Dirección *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ciudad *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Documento de Convenio SARLAB Firmado *</label>
+                    <input type="file" class="form-file" accept=".pdf" required>
+                    <small style="color: #718096; display: block; margin-top: 0.5rem;">Formato PDF, máximo 5MB</small>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Cámara de Comercio</label>
+                    <input type="file" class="form-file" accept=".pdf">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">RUT</label>
+                    <input type="file" class="form-file" accept=".pdf">
+                </div>
+                <button type="submit" class="btn-submit">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <div class="modal-header">Iniciar Sesión</div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Usuario / Correo Electrónico</label>
+                    <input type="text" class="form-input" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-input" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn-submit">Iniciar Sesión</button>
+                <p style="text-align: center; margin-top: 1rem; color: #718096;">
+                    ¿No tiene cuenta? <a href="#" onclick="showRegisterModal(); return false;" style="color: #667eea;">Regístrese aquí</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">Finalizar Compra</div>
+            <form onsubmit="handleCheckout(event)">
+                <div class="form-group">
+                    <label class="form-label">Dirección de Envío *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Ciudad de Envío *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Dirección de Facturación *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Correo Electrónico para Facturación *</label>
+                    <input type="email" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Método de Pago *</label>
+                    <select class="form-input" id="paymentMethod" required>
+                        <option value="">Seleccione un método</option>
+                        <option value="efectivo">Efectivo</option>
+                        <option value="pse">PSE</option>
+                        <option value="tarjeta">Tarjeta de Crédito</option>
+                        <option value="credito">Crédito (Sujeto a aprobación)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Observaciones</label>
+                    <textarea class="form-input" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Confirmar Pedido</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Datos de ejemplo
+        const sampleProducts = [
+            {
+                id: 1,
+                name: 'Paracetamol 500mg',
+                category: 'medicamentos',
+                description: 'Analgésico y antipirético. Caja x 100 tabletas',
+                available: true,
+                supplier: 'Laboratorio ABC',
+                deliveryDays: '2-3 días'
+            },
+            {
+                id: 2,
+                name: 'Jeringas Desechables 10ml',
+                category: 'insumos',
+                description: 'Jeringas estériles desechables. Caja x 100 unidades',
+                available: true,
+                supplier: 'MediSupplies SA',
+                deliveryDays: '1-2 días'
+            },
+            {
+                id: 3,
+                name: 'Guantes de Nitrilo Talla M',
+                category: 'insumos',
+                description: 'Guantes de nitrilo sin polvo. Caja x 100 unidades',
+                available: true,
+                supplier: 'ProMed Colombia',
+                deliveryDays: '1-2 días'
+            },
+            {
+                id: 4,
+                name: 'Ibuprofeno 400mg',
+                category: 'medicamentos',
+                description: 'Antiinflamatorio no esteroideo. Caja x 50 tabletas',
+                available: false,
+                supplier: 'Farmacéutica XYZ',
+                deliveryDays: '5-7 días'
+            },
+            {
+                id: 5,
+                name: 'Termómetro Digital',
+                category: 'equipos',
+                description: 'Termómetro digital infrarrojo sin contacto',
+                available: true,
+                supplier: 'TechMed Solutions',
+                deliveryDays: '3-4 días'
+            },
+            {
+                id: 6,
+                name: 'Mascarillas N95',
+                category: 'insumos',
+                description: 'Mascarillas de protección respiratoria. Caja x 20 unidades',
+                available: true,
+                supplier: 'SafetyMed',
+                deliveryDays: '1-2 días'
+            }
+        ];
+
+        let cart = [];
+        let currentUser = null;
+
+        // Initialize
+        function init() {
+            renderProducts(sampleProducts);
+            updateCartUI();
+            checkUserSession();
+        }
+
+        // Render products
+        function renderProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = products.map(product => `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <div class="product-image">💊</div>
+                    <div class="product-name">${product.name}</div>
+                    <div class="product-description">${product.description}</div>
+                    <div class="product-info">
+                        <div class="info-row">
+                            <span class="info-label">Proveedor:</span>
+                            <span class="info-value">${product.supplier}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Entrega:</span>
+                            <span class="info-value">${product.deliveryDays}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Disponibilidad:</span>
+                            <span class="availability ${product.available ? 'available' : 'unavailable'}">
+                                ${product.available ? 'Disponible' : 'No Disponible'}
+                            </span>
+                        </div>
+                    </div>
+                    <button class="btn-add-cart" onclick="addToCart(${product.id}, event)" ${!product.available ? 'disabled' : ''}>
+                        ${product.available ? 'Agregar al Carrito' : 'No Disponible'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        // Search products
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const availability = document.getElementById('availabilityFilter').value;
+
+            let filtered = sampleProducts.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                     product.description.toLowerCase().includes(searchTerm);
+                const matchesCategory = !category || product.category === category;
+                const matchesAvailability = !availability || 
+                    (availability === 'available' && product.available) ||
+                    (availability === 'unavailable' && !product.available);
+
+                return matchesSearch && matchesCategory && matchesAvailability;
+            });
+
+            renderProducts(filtered);
+        }
+
+        // Add to cart
+        function addToCart(productId, event) {
+            event.stopPropagation();
+            
+            const product = sampleProducts.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            
+            // Show cart briefly
+            document.getElementById('cartSidebar').classList.add('open');
+            setTimeout(() => {
+                if (!currentUser) {
+                    document.getElementById('cartSidebar').classList.remove('open');
+                    showRegisterModal();
+                }
+            }, 1000);
+        }
+
+        // Update cart UI
+        function updateCartUI() {
+            const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = cartCount;
+            document.getElementById('totalItems').textContent = cartCount;
+
+            const cartItemsDiv = document.getElementById('cartItems');
+            
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p style="text-align: center; color: #718096; padding: 2rem;">El carrito está vacío</p>';
+            } else {
+                cartItemsDiv.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div style="font-size: 0.85rem; color: #718096; margin-bottom: 0.5rem;">
+                            ${item.supplier}
+                        </div>
+                        <div class="cart-item-quantity">
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">-</button>
+                            <span style="font-weight: 600;">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            <button class="qty-btn" onclick="removeFromCart(${item.id})" style="margin-left: auto; color: #e53e3e;">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Update quantity
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCartUI();
+                }
+            }
+        }
+
+        // Remove from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        // Toggle cart
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+        }
+
+        // Show modals
+        function showRegisterModal() {
+            document.getElementById('registerModal').classList.add('active');
+            document.getElementById('loginModal').classList.remove('active');
+        }
+
+        function showLoginModal() {
+            document.getElementById('loginModal').classList.add('active');
+            document.getElementById('registerModal').classList.remove('active');
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Handle registration
+        function handleRegistration(event) {
+            event.preventDefault();
+            alert('Solicitud de registro enviada exitosamente.\n\nRecibirá un correo electrónico con su usuario y contraseña una vez su solicitud sea aprobada.\n\nEl proceso de revisión puede tomar entre 24-48 horas.');
+            document.getElementById('registerModal').classList.remove('active');
+        }
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            // Simulate login
+            currentUser = {
+                name: 'IPS Salud Total',
+                email: document.getElementById('loginEmail').value
+            };
+            updateUserUI();
+            document.getElementById('loginModal').classList.remove('active');
+            alert('Inicio de sesión exitoso');
+        }
+
+        // Update user UI
+        function updateUserUI() {
+            if (currentUser) {
+                document.getElementById('guestNav').style.display = 'none';
+                document.getElementById('userNav').classList.add('active');
+                document.getElementById('userName').textContent = currentUser.name;
+            } else {
+                document.getElementById('guestNav').style.display = 'flex';
+                document.getElementById('userNav').classList.remove('active');
+            }
+        }
+
+        // Logout
+        function logout() {
+            currentUser = null;
+            cart = [];
+            updateUserUI();
+            updateCartUI();
+            alert('Sesión cerrada exitosamente');
+        }
+
+        // Check user session
+        function checkUserSession() {
+            // In real app, check localStorage or session
+            updateUserUI();
+        }
+
+        // Proceed to checkout
+        function proceedToCheckout() {
+            if (!currentUser) {
+                alert('Debe iniciar sesión para continuar');
+                showLoginModal();
+                return;
+            }
+
+            if (cart.length === 0) {
+                alert('El carrito está vacío');
+                return;
+            }
+
+            document.getElementById('cartSidebar').classList.remove('open');
+            document.getElementById('checkoutModal').classList.add('active');
+        }
+
+        // Handle checkout
+        function handleCheckout(event) {
+            event.preventDefault();
+            
+            const orderSummary = cart.map(item => 
+                - ${item.name} (${item.quantity} unidades) - ${item.supplier}
+            ).join('\n');
+
+            alert(Pedido confirmado exitosamente!\n\nResumen del pedido:\n${orderSummary}\n\nSe ha enviado una notificación a los proveedores para el despacho de los productos.\n\nRecibirá una confirmación por correo electrónico.);
+            
+            // Clear cart
+            cart = [];
+            updateCartUI();
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        // View product details
+        function viewProduct(productId) {
+            const product = sampleProducts.find(p => p.id === productId);
+            alert(Detalles del Producto:\n\n${product.name}\n${product.description}\n\nProveedor: ${product.supplier}\nTiempo de entrega: ${product.deliveryDays}\nDisponibilidad: ${product.available ? 'Disponible' : 'No Disponible'});
+        }
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
