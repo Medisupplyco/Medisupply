@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Laboratorio - MediSupply</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #f5576c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e04658;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table thead {
+            background: #f7fafc;
+        }
+
+        .table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table tr:hover {
+            background: #f7fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-warning {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        .badge-danger {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .badge-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #f5576c;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .file-upload {
+            border: 2px dashed #cbd5e0;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload:hover {
+            border-color: #f5576c;
+            background: #fff5f7;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #f5576c;
+            border-bottom-color: #f5576c;
+        }
+
+        .tab:hover {
+            color: #f5576c;
+        }
+
+        .order-card {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #f5576c;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .order-number {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: #718096;
+            display: block;
+        }
+
+        .detail-value {
+            color: #2d3748;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🔬 Panel de Laboratorio - MediSupply</div>
+            <div class="user-info">
+                <span style="font-weight: 600;">Laboratorio ABC Colombia</span>
+                <button class="btn btn-secondary" onclick="logout()">Cerrar Sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Dashboard Stats -->
+        <div class="dashboard-grid">
+            <div class="stat-card">
+                <div class="stat-value">24</div>
+                <div class="stat-label">Productos Activos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">8</div>
+                <div class="stat-label">Pedidos Pendientes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">156</div>
+                <div class="stat-label">Pedidos Este Mes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">98%</div>
+                <div class="stat-label">Tasa de Satisfacción</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('products')">Productos</div>
+            <div class="tab" onclick="switchTab('orders')">Pedidos</div>
+            <div class="tab" onclick="switchTab('profile')">Perfil</div>
+        </div>
+
+        <!-- Products Section -->
+        <div id="productsSection" class="section">
+            <div class="section-header">
+                <h2 class="section-title">Mis Productos</h2>
+                <button class="btn btn-primary" onclick="showAddProductModal()">+ Agregar Producto</button>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Precio</th>
+                        <th>Disponibilidad</th>
+                        <th>Stock</th>
+                        <th>Tiempo Envío</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTable">
+                    <tr>
+                        <td><strong>Paracetamol 500mg</strong><br><small>Caja x 100 tabletas</small></td>
+                        <td>Medicamentos</td>
+                        <td>$45,000</td>
+                        <td><span class="badge badge-success">Disponible</span></td>
+                        <td>350 cajas</td>
+                        <td>2-3 días</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="editProduct(1)">Editar</button>
+                                <button class="btn btn-secondary btn-small" onclick="toggleAvailability(1)">Pausar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Amoxicilina 500mg</strong><br><small>Caja x 21 cápsulas</small></td>
+                        <td>Medicamentos</td>
+                        <td>$28,500</td>
+                        <td><span class="badge badge-success">Disponible</span></td>
+                        <td>180 cajas</td>
+                        <td>2-3 días</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="editProduct(2)">Editar</button>
+                                <button class="btn btn-secondary btn-small" onclick="toggleAvailability(2)">Pausar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Insulina Glargina</strong><br><small>Pluma precargada 3ml</small></td>
+                        <td>Medicamentos</td>
+                        <td>$125,000</td>
+                        <td><span class="badge badge-warning">Stock Bajo</span></td>
+                        <td>15 unidades</td>
+                        <td>3-4 días</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="editProduct(3)">Editar</button>
+                                <button class="btn btn-secondary btn-small" onclick="toggleAvailability(3)">Pausar</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Orders Section -->
+        <div id="ordersSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Pedidos Recibidos</h2>
+                <select class="form-input" style="width: auto;">
+                    <option>Todos los estados</option>
+                    <option>Pendiente</option>
+                    <option>En Proceso</option>
+                    <option>Enviado</option>
+                    <option>Entregado</option>
+                </select>
+            </div>
+
+            <div id="ordersList">
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-number">Pedido #1234</div>
+                        <span class="badge badge-warning">Pendiente</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Cliente</span>
+                            <span class="detail-value">IPS Salud Total</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fecha</span>
+                            <span class="detail-value">06 Feb 2026, 14:30</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Productos</span>
+                            <span class="detail-value">3 items</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Dirección</span>
+                            <span class="detail-value">Calle 50 #45-20, Medellín</span>
+                        </div>
+                    </div>
+                    <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                        <strong>Items del pedido:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                            <li>Paracetamol 500mg - 5 cajas</li>
+                            <li>Amoxicilina 500mg - 3 cajas</li>
+                            <li>Jeringas 10ml - 10 cajas</li>
+                        </ul>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-success btn-small" onclick="processOrder(1234)">Procesar Pedido</button>
+                        <button class="btn btn-secondary btn-small" onclick="viewOrderDetails(1234)">Ver Detalles</button>
+                        <button class="btn btn-secondary btn-small" onclick="contactClient(1234)">Contactar IPS</button>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-number">Pedido #1233</div>
+                        <span class="badge badge-info">En Proceso</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Cliente</span>
+                            <span class="detail-value">Clínica San Rafael</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fecha</span>
+                            <span class="detail-value">05 Feb 2026, 10:15</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Productos</span>
+                            <span class="detail-value">2 items</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Guía de envío</span>
+                            <span class="detail-value">TCC123456789</span>
+                        </div>
+                    </div>
+                    <div style="background: white; padding: 1rem; border-radius: 6px; margin-bottom: 1rem;">
+                        <strong>Items del pedido:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                            <li>Insulina Glargina - 8 unidades</li>
+                            <li>Paracetamol 500mg - 10 cajas</li>
+                        </ul>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-success btn-small" onclick="markAsShipped(1233)">Marcar como Enviado</button>
+                        <button class="btn btn-secondary btn-small" onclick="viewOrderDetails(1233)">Ver Detalles</button>
+                    </div>
+                </div>
+
+                <div class="order-card">
+                    <div class="order-header">
+                        <div class="order-number">Pedido #1232</div>
+                        <span class="badge badge-success">Entregado</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Cliente</span>
+                            <span class="detail-value">Hospital General del Norte</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fecha</span>
+                            <span class="detail-value">03 Feb 2026, 08:45</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Entregado</span>
+                            <span class="detail-value">05 Feb 2026, 16:20</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Calificación</span>
+                            <span class="detail-value">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-secondary btn-small" onclick="viewOrderDetails(1232)">Ver Detalles</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Section -->
+        <div id="profileSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Información del Laboratorio</h2>
+                <button class="btn btn-primary" onclick="editProfile()">Editar Información</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h3 style="margin-bottom: 1rem; color: #2d3748;">Datos Generales</h3>
+                    <div class="form-group">
+                        <div class="form-label">Nombre del Laboratorio</div>
+                        <div style="color: #2d3748;">Laboratorio ABC Colombia</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">NIT</div>
+                        <div style="color: #2d3748;">900.123.456-7</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Representante Legal</div>
+                        <div style="color: #2d3748;">Dr. Carlos Méndez</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Correo Electrónico</div>
+                        <div style="color: #2d3748;">contacto@lababc.com.co</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Teléfono</div>
+                        <div style="color: #2d3748;">+57 (4) 444-5555</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 1rem; color: #2d3748;">Documentación</h3>
+                    <div class="form-group">
+                        <div class="form-label">Registro INVIMA</div>
+                        <div style="color: #2d3748;">✓ Aprobado - Vence: 15/12/2026</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Convenio SARLAB</div>
+                        <div style="color: #2d3748;">✓ Aprobado - Activo</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Cámara de Comercio</div>
+                        <div style="color: #2d3748;">✓ Vigente</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">RUT</div>
+                        <div style="color: #2d3748;">✓ Actualizado</div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label">Certificado BPM</div>
+                        <div style="color: #2d3748;">✓ Vigente - Vence: 30/06/2027</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal" id="addProductModal">
+        <div class="modal-content">
+            <div class="modal-header">Agregar Nuevo Producto</div>
+            <form onsubmit="handleAddProduct(event)">
+                <div class="form-group">
+                    <label class="form-label">Nombre del Producto *</label>
+                    <input type="text" class="form-input" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Categoría *</label>
+                        <select class="form-input" required>
+                            <option value="">Seleccione...</option>
+                            <option>Medicamentos</option>
+                            <option>Insumos Hospitalarios</option>
+                            <option>Equipos Médicos</option>
+                            <option>Dispositivos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Precio (COP) *</label>
+                        <input type="number" class="form-input" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Descripción *</label>
+                    <textarea class="form-input" rows="3" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Stock Disponible *</label>
+                        <input type="number" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Unidad</label>
+                        <select class="form-input">
+                            <option>Cajas</option>
+                            <option>Unidades</option>
+                            <option>Frascos</option>
+                            <option>Ampollas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Tiempo de Envío *</label>
+                        <input type="text" class="form-input" placeholder="Ej: 2-3 días" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Registro Sanitario</label>
+                        <input type="text" class="form-input">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Ficha Técnica (PDF)</label>
+                    <input type="file" class="form-input" accept=".pdf">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Imagen del Producto</label>
+                    <input type="file" class="form-input" accept="image/*">
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Guardar Producto</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('addProductModal')" style="flex: 1;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Hide all sections
+            document.getElementById('productsSection').style.display = 'none';
+            document.getElementById('ordersSection').style.display = 'none';
+            document.getElementById('profileSection').style.display = 'none';
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+            // Show selected section and activate tab
+            if (tab === 'products') {
+                document.getElementById('productsSection').style.display = 'block';
+                document.querySelectorAll('.tab')[0].classList.add('active');
+            } else if (tab === 'orders') {
+                document.getElementById('ordersSection').style.display = 'block';
+                document.querySelectorAll('.tab')[1].classList.add('active');
+            } else if (tab === 'profile') {
+                document.getElementById('profileSection').style.display = 'block';
+                document.querySelectorAll('.tab')[2].classList.add('active');
+            }
+        }
+
+        function showAddProductModal() {
+            document.getElementById('addProductModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        function handleAddProduct(event) {
+            event.preventDefault();
+            alert('Producto agregado exitosamente!\n\nEl producto ahora está visible en la plataforma para que las IPS puedan comprarlo.');
+            closeModal('addProductModal');
+        }
+
+        function editProduct(id) {
+            alert('Editar producto #' + id);
+        }
+
+        function toggleAvailability(id) {
+            if (confirm('¿Está seguro de pausar la disponibilidad de este producto?')) {
+                alert('Disponibilidad actualizada');
+            }
+        }
+
+        function processOrder(orderId) {
+            if (confirm('¿Confirma que procesará el pedido #' + orderId + '?')) {
+                alert('Pedido marcado como "En Proceso".\n\nPor favor, prepare los productos para el despacho y actualice el estado cuando esté listo para enviar.');
+            }
+        }
+
+        function markAsShipped(orderId) {
+            const guia = prompt('Ingrese el número de guía de envío:');
+            if (guia) {
+                alert('Pedido #' + orderId + ' marcado como enviado.\n\nGuía: ' + guia + '\n\nSe ha notificado a la IPS sobre el envío.');
+            }
+        }
+
+        function viewOrderDetails(orderId) {
+            alert('Ver detalles completos del pedido #' + orderId);
+        }
+
+        function contactClient(orderId) {
+            alert('Abrir chat o correo para contactar al cliente del pedido #' + orderId);
+        }
+
+        function editProfile() {
+            alert('Editar información del laboratorio');
+        }
+
+        function logout() {
+            if (confirm('¿Está seguro de cerrar sesión?')) {
+                window.location.href = 'medisupply-platform.html';
+            }
+        }
+    </script>
+</body>
+</html>
