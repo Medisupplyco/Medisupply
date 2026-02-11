@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - MediSupply</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+
+        .stat-icon.orange {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .stat-info {
+            flex: 1;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .stat-label {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            border-bottom: 2px solid #e2e8f0;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            color: #718096;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
+            background: #48bb78;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #f56565;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table thead {
+            background: #f7fafc;
+        }
+
+        .table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .table td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table tr:hover {
+            background: #f7fafc;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .badge-warning {
+            background: #feebc8;
+            color: #7c2d12;
+        }
+
+        .badge-danger {
+            background: #fed7d7;
+            color: #742a2a;
+        }
+
+        .badge-info {
+            background: #bee3f8;
+            color: #2c5282;
+        }
+
+        .badge-secondary {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .request-card {
+            background: #f7fafc;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #667eea;
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .request-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .request-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            color: #718096;
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .detail-value {
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #2d3748;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .info-label {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: #2d3748;
+            font-weight: 600;
+        }
+
+        .document-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .document-item {
+            padding: 0.8rem;
+            background: #f7fafc;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: #f7fafc;
+            border-radius: 8px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-select {
+            padding: 0.7rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">⚙️ Panel de Administración - MediSupply</div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <span style="font-weight: 600;">Admin Principal</span>
+                <button class="btn btn-secondary">Cerrar Sesión</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Statistics Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon purple">🏥</div>
+                <div class="stat-info">
+                    <div class="stat-value">47</div>
+                    <div class="stat-label">IPS Registradas</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">🔬</div>
+                <div class="stat-info">
+                    <div class="stat-value">23</div>
+                    <div class="stat-label">Laboratorios Activos</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">📦</div>
+                <div class="stat-info">
+                    <div class="stat-value">1,247</div>
+                    <div class="stat-label">Productos en Catálogo</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon blue">💰</div>
+                <div class="stat-info">
+                    <div class="stat-value">$458M</div>
+                    <div class="stat-label">Volumen Este Mes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('solicitudes')">Solicitudes Pendientes</div>
+            <div class="tab" onclick="switchTab('ips')">IPS Registradas</div>
+            <div class="tab" onclick="switchTab('laboratorios')">Laboratorios</div>
+            <div class="tab" onclick="switchTab('transacciones')">Transacciones</div>
+            <div class="tab" onclick="switchTab('reportes')">Reportes</div>
+        </div>
+
+        <!-- Solicitudes Pendientes Section -->
+        <div id="solicitudesSection" class="section">
+            <div class="section-header">
+                <h2 class="section-title">Solicitudes de Registro Pendientes</h2>
+                <span class="badge badge-warning">5 pendientes</span>
+            </div>
+
+            <div>
+                <!-- IPS Requests -->
+                <h3 style="margin-bottom: 1rem; color: #2d3748;">Solicitudes de IPS</h3>
+                
+                <div class="request-card">
+                    <div class="request-header">
+                        <div class="request-title">IPS Salud Integral</div>
+                        <span class="badge badge-warning">Pendiente Revisión</span>
+                    </div>
+                    <div class="request-details">
+                        <div class="detail-item">
+                            <span class="detail-label">NIT</span>
+                            <span class="detail-value">900.234.567-8</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Representante Legal</span>
+                            <span class="detail-value">Dra. María González</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ciudad</span>
+                            <span class="detail-value">Medellín</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fecha Solicitud</span>
+                            <span class="detail-value">05 Feb 2026</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Correo</span>
+                            <span class="detail-value">contacto@ipssaludintegral.com</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Teléfono</span>
+                            <span class="detail-value">+57 (4) 333-4444</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Documentos adjuntos:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                            <li>✓ Convenio SARLAB firmado</li>
+                            <li>✓ Cámara de Comercio</li>
+                            <li>✓ RUT</li>
+                        </ul>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-small" onclick="reviewRequest('IPS', 1)">Revisar Documentos</button>
+                        <button class="btn btn-success btn-small" onclick="approveRequest('IPS', 1)">Aprobar</button>
+                        <button class="btn btn-danger btn-small" onclick="rejectRequest('IPS', 1)">Rechazar</button>
+                    </div>
+                </div>
+
+                <div class="request-card">
+                    <div class="request-header">
+                        <div class="request-title">Clínica del Valle</div>
+                        <span class="badge badge-warning">Pendiente Revisión</span>
+                    </div>
+                    <div class="request-details">
+                        <div class="detail-item">
+                            <span class="detail-label">NIT</span>
+                            <span class="detail-value">900.345.678-9</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Representante Legal</span>
+                            <span class="detail-value">Dr. Jorge Ramírez</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ciudad</span>
+                            <span class="detail-value">Cali</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fecha Solicitud</span>
+                            <span class="detail-value">04 Feb 2026</span>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-small" onclick="reviewRequest('IPS', 2)">Revisar Documentos</button>
+                        <button class="btn btn-success btn-small" onclick="approveRequest('IPS', 2)">Aprobar</button>
+                        <button class="btn btn-danger btn-small" onclick="rejectRequest('IPS', 2)">Rechazar</button>
+                    </div>
+                </div>
+
+                <h3 style="margin: 2rem 0 1rem; color: #2d3748;">Solicitudes de Laboratorios</h3>
+                
+                <div class="request-card" style="border-left-color: #f5576c;">
+                    <div class="request-header">
+                        <div class="request-title">Laboratorio FarmaSalud</div>
+                        <span class="badge badge-warning">Pendiente Revisión</span>
+                    </div>
+                    <div class="request-details">
+                        <div class="detail-item">
+                            <span class="detail-label">NIT</span>
+                            <span class="detail-value">900.456.789-0</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Representante Legal</span>
+                            <span class="detail-value">Dr. Carlos Suárez</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Ciudad</span>
+                            <span class="detail-value">Bogotá</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Fecha Solicitud</span>
+                            <span class="detail-value">03 Feb 2026</span>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <strong>Documentos adjuntos:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1.5rem;">
+                            <li>✓ Registro INVIMA</li>
+                            <li>✓ Convenio SARLAB</li>
+                            <li>✓ Certificado BPM</li>
+                            <li>✓ Cámara de Comercio</li>
+                            <li>✓ RUT</li>
+                        </ul>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-primary btn-small" onclick="reviewRequest('LAB', 1)">Revisar Documentos</button>
+                        <button class="btn btn-success btn-small" onclick="approveRequest('LAB', 1)">Aprobar</button>
+                        <button class="btn btn-danger btn-small" onclick="rejectRequest('LAB', 1)">Rechazar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- IPS Registradas Section -->
+        <div id="ipsSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">IPS Registradas</h2>
+                <button class="btn btn-primary">Exportar Lista</button>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Buscar por nombre, NIT, ciudad...">
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+
+            <div class="filter-group">
+                <select class="filter-select">
+                    <option>Todas las ciudades</option>
+                    <option>Medellín</option>
+                    <option>Bogotá</option>
+                    <option>Cali</option>
+                    <option>Barranquilla</option>
+                </select>
+                <select class="filter-select">
+                    <option>Todos los estados</option>
+                    <option>Activa</option>
+                    <option>Inactiva</option>
+                    <option>Suspendida</option>
+                </select>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>IPS</th>
+                        <th>NIT</th>
+                        <th>Ciudad</th>
+                        <th>Representante Legal</th>
+                        <th>Fecha Registro</th>
+                        <th>Estado</th>
+                        <th>Pedidos</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>IPS Salud Total</strong></td>
+                        <td>900.123.456-7</td>
+                        <td>Medellín</td>
+                        <td>Dr. Juan Pérez</td>
+                        <td>15 Ene 2026</td>
+                        <td><span class="badge badge-success">Activa</span></td>
+                        <td>127 pedidos</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="viewIPSDetails(1)">Ver</button>
+                                <button class="btn btn-secondary btn-small" onclick="editIPS(1)">Editar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hospital General del Norte</strong></td>
+                        <td>900.234.567-8</td>
+                        <td>Barranquilla</td>
+                        <td>Dra. Ana López</td>
+                        <td>22 Ene 2026</td>
+                        <td><span class="badge badge-success">Activa</span></td>
+                        <td>89 pedidos</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="viewIPSDetails(2)">Ver</button>
+                                <button class="btn btn-secondary btn-small" onclick="editIPS(2)">Editar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Clínica San Rafael</strong></td>
+                        <td>900.345.678-9</td>
+                        <td>Bogotá</td>
+                        <td>Dr. Roberto Sánchez</td>
+                        <td>28 Ene 2026</td>
+                        <td><span class="badge badge-success">Activa</span></td>
+                        <td>156 pedidos</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="viewIPSDetails(3)">Ver</button>
+                                <button class="btn btn-secondary btn-small" onclick="editIPS(3)">Editar</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Laboratorios Section -->
+        <div id="laboratoriosSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Laboratorios Registrados</h2>
+                <button class="btn btn-primary">Exportar Lista</button>
+            </div>
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Buscar por nombre, NIT...">
+                <button class="btn btn-primary">Buscar</button>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Laboratorio</th>
+                        <th>NIT</th>
+                        <th>Productos</th>
+                        <th>Pedidos</th>
+                        <th>INVIMA</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Laboratorio ABC Colombia</strong></td>
+                        <td>900.456.789-0</td>
+                        <td>24 productos</td>
+                        <td>234 pedidos</td>
+                        <td><span class="badge badge-success">Vigente</span></td>
+                        <td><span class="badge badge-success">Activo</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="viewLabDetails(1)">Ver</button>
+                                <button class="btn btn-secondary btn-small" onclick="editLab(1)">Editar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>MediSupplies SA</strong></td>
+                        <td>900.567.890-1</td>
+                        <td>18 productos</td>
+                        <td>189 pedidos</td>
+                        <td><span class="badge badge-success">Vigente</span></td>
+                        <td><span class="badge badge-success">Activo</span></td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn btn-secondary btn-small" onclick="viewLabDetails(2)">Ver</button>
+                                <button class="btn btn-secondary btn-small" onclick="editLab(2)">Editar</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Transacciones Section -->
+        <div id="transaccionesSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Transacciones Recientes</h2>
+                <button class="btn btn-primary">Exportar Reporte</button>
+            </div>
+
+            <div class="filter-group">
+                <input type="date" class="filter-select">
+                <select class="filter-select">
+                    <option>Todos los estados</option>
+                    <option>Completada</option>
+                    <option>Pendiente</option>
+                    <option>Cancelada</option>
+                </select>
+                <select class="filter-select">
+                    <option>Todos los métodos de pago</option>
+                    <option>Efectivo</option>
+                    <option>PSE</option>
+                    <option>Tarjeta de Crédito</option>
+                    <option>Crédito</option>
+                </select>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID Transacción</th>
+                        <th>IPS</th>
+                        <th>Laboratorio</th>
+                        <th>Fecha</th>
+                        <th>Método de Pago</th>
+                        <th>Monto</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>#TRX-1234</strong></td>
+                        <td>IPS Salud Total</td>
+                        <td>Laboratorio ABC</td>
+                        <td>06 Feb 2026, 14:30</td>
+                        <td>PSE</td>
+                        <td>$1,245,000</td>
+                        <td><span class="badge badge-success">Completada</span></td>
+                        <td>
+                            <button class="btn btn-secondary btn-small" onclick="viewTransaction(1234)">Ver</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>#TRX-1233</strong></td>
+                        <td>Hospital General</td>
+                        <td>MediSupplies SA</td>
+                        <td>06 Feb 2026, 11:15</td>
+                        <td>Crédito</td>
+                        <td>$3,890,000</td>
+                        <td><span class="badge badge-warning">Pendiente</span></td>
+                        <td>
+                            <button class="btn btn-secondary btn-small" onclick="viewTransaction(1233)">Ver</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Reportes Section -->
+        <div id="reportesSection" class="section" style="display: none;">
+            <div class="section-header">
+                <h2 class="section-title">Reportes y Análisis</h2>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <h3 style="margin-bottom: 1rem;">Resumen Mensual</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Total Transacciones</div>
+                            <div class="info-value">1,247</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Volumen de Ventas</div>
+                            <div class="info-value">$458,345,000</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Comisión Plataforma</div>
+                            <div class="info-value">$22,917,250</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Nuevos Registros</div>
+                            <div class="info-value">12 este mes</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 style="margin-bottom: 1rem;">Productos Más Vendidos</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Ventas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Paracetamol 500mg</td>
+                                <td>1,234 cajas</td>
+                            </tr>
+                            <tr>
+                                <td>Jeringas 10ml</td>
+                                <td>890 cajas</td>
+                            </tr>
+                            <tr>
+                                <td>Guantes de Nitrilo</td>
+                                <td>756 cajas</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3 style="margin-bottom: 1rem;">Gráfico de Ventas (Simulado)</h3>
+                <div style="text-align: center; padding: 3rem; background: white; border-radius: 6px;">
+                    <p style="color: #718096;">📊 Aquí se integraría un gráfico de análisis de ventas</p>
+                    <p style="color: #718096; margin-top: 0.5rem; font-size: 0.9rem;">Librerías sugeridas: Chart.js o Recharts</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">Revisar Solicitud de Registro</div>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Nombre</div>
+                    <div class="info-value" id="reviewName">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">NIT</div>
+                    <div class="info-value" id="reviewNIT">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Representante</div>
+                    <div class="info-value" id="reviewRep">-</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Ciudad</div>
+                    <div class="info-value" id="reviewCity">-</div>
+                </div>
+            </div>
+
+            <h3 style="margin: 1.5rem 0 1rem;">Documentos Adjuntos</h3>
+            <ul class="document-list">
+                <li class="document-item">
+                    <span>📄 Convenio SARLAB firmado.pdf</span>
+                    <button class="btn btn-secondary btn-small">Descargar</button>
+                </li>
+                <li class="document-item">
+                    <span>📄 Cámara de Comercio.pdf</span>
+                    <button class="btn btn-secondary btn-small">Descargar</button>
+                </li>
+                <li class="document-item">
+                    <span>📄 RUT.pdf</span>
+                    <button class="btn btn-secondary btn-small">Descargar</button>
+                </li>
+            </ul>
+
+            <div style="margin-top: 2rem; display: flex; gap: 1rem;">
+                <button class="btn btn-success" style="flex: 1;" onclick="confirmApprove()">Aprobar Solicitud</button>
+                <button class="btn btn-danger" style="flex: 1;" onclick="confirmReject()">Rechazar</button>
+                <button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            // Hide all sections
+            document.getElementById('solicitudesSection').style.display = 'none';
+            document.getElementById('ipsSection').style.display = 'none';
+            document.getElementById('laboratoriosSection').style.display = 'none';
+            document.getElementById('transaccionesSection').style.display = 'none';
+            document.getElementById('reportesSection').style.display = 'none';
+
+            // Remove active from all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+
+            // Show selected section
+            const sections = {
+                'solicitudes': 'solicitudesSection',
+                'ips': 'ipsSection',
+                'laboratorios': 'laboratoriosSection',
+                'transacciones': 'transaccionesSection',
+                'reportes': 'reportesSection'
+            };
+
+            document.getElementById(sections[tab]).style.display = 'block';
+            
+            // Activate corresponding tab
+            const tabIndex = Object.keys(sections).indexOf(tab);
+            document.querySelectorAll('.tab')[tabIndex].classList.add('active');
+        }
+
+        function reviewRequest(type, id) {
+            document.getElementById('reviewModal').classList.add('active');
+        }
+
+        function approveRequest(type, id) {
+            if (confirm(¿Está seguro de aprobar esta solicitud de ${type === 'IPS' ? 'IPS' : 'Laboratorio'}?)) {
+                alert(Solicitud aprobada!\n\nSe ha generado automáticamente:\n- Usuario y contraseña\n- Correo de confirmación enviado\n\nEl ${type === 'IPS' ? 'IPS' : 'Laboratorio'} ahora puede acceder a la plataforma.);
+            }
+        }
+
+        function rejectRequest(type, id) {
+            const reason = prompt('Ingrese el motivo del rechazo:');
+            if (reason) {
+                alert(Solicitud rechazada.\n\nSe ha enviado un correo al solicitante con el motivo del rechazo.);
+            }
+        }
+
+        function confirmApprove() {
+            alert('Solicitud aprobada exitosamente!');
+            closeModal();
+        }
+
+        function confirmReject() {
+            const reason = prompt('Ingrese el motivo del rechazo:');
+            if (reason) {
+                alert('Solicitud rechazada. Se ha notificado al solicitante.');
+                closeModal();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('reviewModal').classList.remove('active');
+        }
+
+        function viewIPSDetails(id) {
+            alert('Ver detalles completos de la IPS #' + id);
+        }
+
+        function editIPS(id) {
+            alert('Editar información de la IPS #' + id);
+        }
+
+        function viewLabDetails(id) {
+            alert('Ver detalles completos del Laboratorio #' + id);
+        }
+
+        function editLab(id) {
+            alert('Editar información del Laboratorio #' + id);
+        }
+
+        function viewTransaction(id) {
+            alert('Ver detalles de la transacción #' + id);
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
